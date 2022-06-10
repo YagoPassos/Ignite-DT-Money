@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { FormEvent, ReactNode, useState } from 'react';
 import Modal from 'react-modal'
 import incomeImg from '../../assets/income.svg'
 import outcomeImg from '../../assets/outcome.svg'
@@ -11,12 +11,24 @@ interface NewTransactionModalProps {
 }
 
 function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProps) {
-
+  const [title, setTitle] = useState('')
+  const [value, setValue] = useState(0)
+  const [category, setCategory] = useState('')
   const [type, setType] = useState('deposit')
 
+  function handleCreateNewTransaction(event: FormEvent){
+    event.preventDefault();
+
+    console.log({
+      title,
+      category,
+      type,
+      value
+    })
+  }
 
   return (
-    <Container>
+    <Container onSubmit={handleCreateNewTransaction}>
       <Modal
         isOpen={isOpen}
         onRequestClose={onRequestClose}
@@ -32,8 +44,8 @@ function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProp
         </button>
         <Container>
           <h2>Register Trasaction</h2>
-          <input placeholder='Title' type="text" />
-          <input placeholder='Value' type="number" />
+          <input placeholder='Title' type="text" value={title} onChange={ event => setTitle(event.target.value)}/>
+          <input placeholder='Value' type="number" value={value} onChange={ event => setValue(Number(event.target.value))} />
 
           <TrasactionTypeContainer>
             <RadioBox type='button'
@@ -56,7 +68,7 @@ function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProp
             </RadioBox>
 
           </TrasactionTypeContainer>
-          <input placeholder='Category' />
+          <input placeholder='Category' value={category} onChange={ event => setCategory(event.target.value)}/>
 
           <button type='submit'>
             Register
